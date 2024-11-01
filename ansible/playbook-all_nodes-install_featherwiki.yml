@@ -1,0 +1,41 @@
+---
+- name: 'Download Featherwiki and start Apache2'
+  hosts: 'all'
+  gather_facts: true
+  become: true
+
+  tasks:
+
+    - name: 'Download the Featherwiki HTML file'
+      ansible.builtin.get_url:
+        url: 'https://feather.wiki/builds/v1.8.x/FeatherWiki_Skylark.html'
+        dest: '/srv/www/htdocs/index.html'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+
+    - name: 'Start the apache2 service'
+      ansible.builtin.service:
+        name: 'apache2'
+        state: 'started'
+
+    - name: 'Enable the apache2 service'
+      ansible.builtin.service:
+        name: 'apache2'
+        enabled: true
+
+    - name: 'Wait for the URL to be reachable'
+      delegate_to: localhost
+      ansible.builtin.uri:
+        url: "http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+      register: result
+      until: "result.status == 200"
+      retries: 11
+      delay: 10
+      become: false
+
+    - name: 'Output the FeatherWiki URL'
+      delegate_to: localhost
+      ansible.builtin.debug:
+        msg: "FeatherWiki is waiting for you at this URL: http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+      become: false
