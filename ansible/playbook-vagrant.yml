@@ -29,3 +29,6 @@
 
 - name: 'Run playbook-all_nodes-install_apache.yml'
   ansible.builtin.import_playbook: playbook-all_nodes-install_apache.yml
+
+- name: 'Run playbook-all_nodes-install_featherwiki.yml'
+  ansible.builtin.import_playbook: playbook-all_nodes-install_featherwiki.yml
