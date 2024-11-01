@@ -22,3 +22,10 @@
 
 - name: 'Run playbook-all_nodes-minimal_bashrc.yml'
   ansible.builtin.import_playbook: playbook-all_nodes-minimal_bashrc.yml
+
+#
+# Apache and Featherwiki
+#
+
+- name: 'Run playbook-all_nodes-install_apache.yml'
+  ansible.builtin.import_playbook: playbook-all_nodes-install_apache.yml
